@@ -1,0 +1,136 @@
+1) Broadcasting & Array Operations
+What is the output of the following code?
+import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([[1], [2], [3]])
+print(a + b)
+
+answer  A) [[2, 3, 4], [3, 4, 5], [4, 5, 6]]
+
+2)  Indexing & Slicing
+Given arr = np.arange(12).reshape(3, 4), which code extracts the subarray [[5, 6], [9, 10]]?
+
+answer is A) arr[1:3, 1:3]
+
+3) Vectorized Operations
+ Replace all negative values in arr = np.array([-2, -1, 0, 1, 2]) with 0 using a single vectorized operation.
+
+import numpy as np
+arr = np.array([-2, -1, 0, 1, 2])
+arr[arr < 0] = 0
+print(arr)
+output:
+[0 0 0 1 2]
+
+
+4) Aggregation & NaN Handling
+ Compute the row-wise mean of matrix below, ignoring NaN values:
+
+import numpy as np
+matrix = np.array([[1, np.nan, 3], [4, 5, np.nan]])
+row_means = np.nanmean(matrix, axis=1)
+print(row_means)
+output: [2.  4.5]
+
+5) Advanced Indexing
+What does this code return?
+
+data = np.array([10, 20, 30, 40])
+idx = np.array([True, False, True, False])
+print(data[idx])
+
+answer is a A) [10, 30]
+
+section 2 
+
+6)  using pandas DataFrame Creation & Basics 
+ Create a DataFrame df from this dictionary, ensuring the index is [100, 101, 102]:
+
+data = {'Name': ['Alice', 'Bob', 'Charlie'], 'Age': [25, 30, 35]}
+
+
+import pandas as pd
+data = {'Name': ['Alice', 'Bob', 'Charlie'], 'Age': [25, 30, 35]}
+df = pd.DataFrame(data, index=[100, 101, 102])
+print(df)
+output: 
+     Name  Age
+100    Alice   25
+101      Bob   30
+102  Charlie   35
+
+7)  Handling Missing Data
+In df, replace all NaN values in column 'B' with the mean of column 'B'.
+df = pd.DataFrame({'A': [1, 2, np.nan], 'B': [np.nan, 5, 6]})
+
+import numpy as np
+import pandas as pd
+df = pd.DataFrame({'A': [1, 2, np.nan], 'B': [np.nan, 5, 6]})
+mean_B = df['B'].mean()
+df['B'] = df['B'].fillna(mean_B)
+print(df)
+output : 
+   A    B
+0  1.0  5.5
+1  2.0  5.0
+2  NaN  6.0
+
+8) GroupBy & Aggregation
+Group df by 'Region', then compute the sum of 'Sales' and mean of 'Profit' for each group. Reset the index.
+df = pd.DataFrame({
+    'Sales': [100, 200, 150, 250],
+   'Profit': [20, 30, 25, 40]
+})
+
+import pandas as pd
+df = pd.DataFrame({
+    'Region': ['North', 'South', 'North', 'South'],
+    'Sales': [100, 200, 150, 250],
+    'Profit': [20, 30, 25, 40]
+})
+result = df.groupby('Region').agg({
+    'Sales': 'sum',
+    'Profit': 'mean'
+}).reset_index()
+print(result)
+
+output: 
+Region  Sales  Profit
+0  North    250    22.5
+1  South    450    35.0
+
+9) Merging DataFrames
+Merge orders and customers on 'cust_id', keeping all orders (even if no customer match exists).
+orders = pd.DataFrame({'order_id': [1, 2], 'cust_id': [101, 102]})
+customers = pd.DataFrame({'cust_id': [101, 103], 'name': ['Alice', 'Bob']})
+
+import pandas as pd
+orders = pd.DataFrame({'order_id': [1, 2], 'cust_id': [101, 102]})
+customers = pd.DataFrame({'cust_id': [101, 103], 'name': ['Alice', 'Bob']})
+merged_df = pd.merge(orders, customers, on='cust_id', how='left')
+print(merged_df)
+output : 
+   order_id  cust_id   name
+0         1      101  Alice
+1         2      102    NaN 
+
+
+10) Time Series & Resampling
+Convert 'Date' to datetime, set it as the index, and resample to monthly frequency, summing 'Value'.
+df = pd.DataFrame({
+  'Date': ['2023-01-05', '2023-01-15', '2023-02-10'],
+    'Value': [10, 20, 30]})
+
+import pandas as pd
+df = pd.DataFrame({
+    'Date': ['2023-01-05', '2023-01-15', '2023-02-10'],
+    'Value': [10, 20, 30]
+})
+df['Date'] = pd.to_datetime(df['Date'])
+df.set_index('Date', inplace=True)
+monthly_sum = df.resample('ME').sum()
+print(monthly_sum)
+output:             
+Date           Value        
+2023-01-31     30
+2023-02-28     30
